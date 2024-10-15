@@ -16,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+//lecture du dossier Dist
 app.use(express.static(path.join(__dirname,"dist")))
 
 app.use(morgan("dev"));
@@ -24,13 +25,14 @@ app.use("/api/commande", midllewearDecript, commandeRouter);
 app.use("/public", express.static(path.join(__dirname,"public")));
 
 
-
+//supprime tous tes console Log et remplace la base url par l'url de render et tu fait mise en production avec le dist du front
 app.use("/", (req, res) => {
   res.setHeader("content-type","text/html").sendFile(path.join(__dirname,"dist","index.html"))
 });
 app.use("/*", (req, res) => {
   res.setHeader("content-type","text/html").sendFile(path.join(__dirname,"dist","index.html"))
 });
+////
 
 
 
