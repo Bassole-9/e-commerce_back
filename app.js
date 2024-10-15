@@ -16,15 +16,24 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.use(morgan("dev"));
+app.use(express.static(path.join(__dirname,"dist")))
 
-app.get("/", (req, res) => {
-  res.send("Welcome to the homepage!");
-});
+app.use(morgan("dev"));
 app.use("/api/users", UserRouter);
 app.use("/api/commande", midllewearDecript, commandeRouter);
-
 app.use("/public", express.static(path.join(__dirname,"public")));
+
+
+
+app.use("/", (req, res) => {
+  res.setHeader("content-type","text/html").sendFile(path.join(__dirname,"dist","index.html"))
+});
+app.use("/*", (req, res) => {
+  res.setHeader("content-type","text/html").sendFile(path.join(__dirname,"dist","index.html"))
+});
+
+
+
 connecterDb()
   .then(() => {
     const PORT = process.env.PORT || 3000;
