@@ -6,8 +6,6 @@ class CommandeControllers {
     try {
       //R requette
       const data = req.body;
-      console.log(data);
-
       if (!data.total) {
         throw new Error("total manquant");
       }
@@ -25,50 +23,52 @@ class CommandeControllers {
     }
   }
 
-
+  ///recuperer dans la BD
   static async getCommandes(req, res) {
     try {
       //R requette
-      const userId = res.locals.userId
-      
+      const userId = res.locals.userId;
       if (!userId) {
-        res.status(404).json({statut:false, message:"userId manquant"})
+        res.status(404).json({ statut: false, message: "userId manquant" });
       }
-      //method d'enregistrement dans ma Bd
-      const commandes = await Command.find({userId : userId})
-      // if(commandes.length===0){
-      //   res.status(404).json({statut:false,message:"aucune commande trouvée"})
-      // }
-      res.status(200).json({ statut: true, commandes:commandes });
+      //method de recuperation dans ma Bd
+      const commandes = await Command.find({ userId: userId });
+      res.status(200).json({ statut: true, commandes: commandes });
     } catch (e) {
       console.log("error", e);
       res.status(500).json({ statut: false, message: e.message });
     }
   }
 
-
-
+  ///modifier un element dans ma base de donnees
   static async updateCommande(req, res) {
     try {
       //R requette
       const commandeId = req.params.id;
+      console.log(commandeId);
+
       if (!commandeId) {
-        res.status(404).json({statut:false, message:"id commande manquant"})
+        res
+          .status(404)
+          .json({ statut: false, message: "id commande manquant" });
       }
 
       const data = req.body;
-      if (!data) {
-        res.status(404).json({statut:false, message:"aucune donneé a mettre a jour"})
+
+      ///metod de modifications dans ma BD
+      const updateCommande = await Command.findByIdAndUpdate(
+        commandeId,
+        { ...data, annuler: true },
+        { new: true }
+      );
+      if (!updateCommande) {
+        res
+          .status(404)
+          .json({ statut: false, message: "commande non trouvée" });
       }
-      //method d'enregistrement dans ma Bd
-      const updateCommande = await Command.findByIdAndUpdate({
-        _id: commandeId,
-        userId: res.locals.userId,
-      });
-      res.status(201).json({ statut: true, message: newCommande });
+      return res.status(201).json({ statut: true, message: updateCommande });
     } catch (e) {
-      console.log("error", e);
-      res.status(500).json({ statut: false, message: e.message });
+      return res.status(500).json({ statut: false, message: e.message });
     }
   }
 }
