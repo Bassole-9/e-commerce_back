@@ -16,10 +16,10 @@ class userControllers {
         });
       }
 
-      if(!BonMail.test(email)){
+      if (!BonMail.test(email)) {
         return res
-        .status(400)
-        .json({ message: "Veuillez entrer un email valide", status: false });
+          .status(400)
+          .json({ message: "Veuillez entrer un email valide", status: false });
       }
 
       if (motDePasse.length < 6) {
@@ -109,7 +109,9 @@ class userControllers {
 
   static async getAllUser(req, res) {
     try {
-      const user = await User.find({});
+      const user = await User.find({ email });
+      console.log("tech", user);
+
       if (!user)
         return res
           .status(404)
@@ -120,16 +122,12 @@ class userControllers {
     }
   }
 
-
-
-
-
   static async login(req, res) {
     try {
       const { email, motDePasse } = req.body;
       const BonMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      if(!email||!motDePasse){
+      if (!email || !motDePasse) {
         return res.status(400).json({
           message: "Veuillez renseigner tous les champs",
           status: false,
@@ -142,10 +140,11 @@ class userControllers {
           .json({ message: "Veuillez entrer un email valide", status: false });
       }
 
-
       const user = await User.findOne({ email });
       if (!user) {
-        res.status(401).json({ statut: false, message: "Cet utilisateur n'existe pas" });
+        res
+          .status(401)
+          .json({ statut: false, message: "Cet utilisateur n'existe pas" });
       }
 
       if (user) {
