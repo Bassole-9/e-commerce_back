@@ -61,17 +61,31 @@ class userControllers {
   static async updateUser(req, res) {
     try {
       const { motDePasse, ...body } = req.body;
+      console.log("xxxxx", req.body);
+
       const { id } = req.params;
+
       const user = await User.findById(id);
       if (!user)
         return res
           .status(404)
           .json({ statut: false, message: "utilisateur non trouvé" });
-      const salt = await genSalt(10);
-      const HashMdp = await hash(motDePasse, salt);
+      let HashMdp = user.motDePasse;
 
-      await User.updateOne({ _id: id }, { HashMdp, ...body });
-      res.status(201).json({ statut: true, message: "bien modifié " });
+      if (motDePasse) {
+        const salt = await genSalt(10);
+        HashMdp = await hash(motDePasse, salt);
+      }
+      await User.updateOne(
+        { _id: id },
+        {
+          motDePasse: HashMdp,
+          ...body,
+        }
+      );
+      res
+        .status(200)
+        .json({ statut: true, message: "Utilisateur modifié avec succès " });
     } catch (e) {
       res.status(500).json({ statut: false, message: e.message });
     }
@@ -86,7 +100,9 @@ class userControllers {
           .status(404)
           .json({ statut: false, message: "utilisateur non trouvé" });
       await User.deleteOne({ _id: id });
-      res.status(200).json({ statut: true, message: "supprimé avec succès" });
+      res
+        .status(200)
+        .json({ statut: true, message: "utilisateur supprimé avec succès" });
     } catch (e) {
       res.status(500).json({ statut: false, message: e.message });
     }
@@ -109,9 +125,7 @@ class userControllers {
 
   static async getAllUser(req, res) {
     try {
-      const user = await User.find({ email });
-      console.log("tech", user);
-
+      const user = await User.find();
       if (!user)
         return res
           .status(404)
