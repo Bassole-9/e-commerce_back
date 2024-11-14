@@ -18,7 +18,6 @@ class CommandeControllers {
       });
       res.status(201).json({ statut: true, message: newCommande });
     } catch (e) {
-      console.log("error", e);
       res.status(500).json({ statut: false, message: e.message });
     }
   }
@@ -45,7 +44,6 @@ class CommandeControllers {
     try {
       //R requette
       const commandeId = req.params.id;
-      console.log(commandeId);
 
       if (!commandeId) {
         res

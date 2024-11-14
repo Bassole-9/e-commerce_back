@@ -50,10 +50,8 @@ class userControllers {
           .status(404)
           .json({ statut: false, message: "Erreur lors création" });
       }
-      console.log(newUser);
       res.status(200).json({ statut: true, message: newUser });
     } catch (e) {
-      console.error(e);
       res.status(500).json({ statut: false, message: e.message });
     }
   }
@@ -61,7 +59,6 @@ class userControllers {
   static async updateUser(req, res) {
     try {
       const { motDePasse, ...body } = req.body;
-      console.log("xxxxx", req.body);
 
       const { id } = req.params;
 
