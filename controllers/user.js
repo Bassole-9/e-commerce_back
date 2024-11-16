@@ -61,7 +61,7 @@ class userControllers {
     try {
       const { motDePasse, ...body } = req.body;
       const { id } = req.params;
-      
+
       const user = await User.findById(id);
       if (!user)
         return res
@@ -89,6 +89,7 @@ class userControllers {
       res.status(500).json({ statut: false, message: e.message });
     }
   }
+
 
   static async deleteUser(req, res) {
     try {
@@ -191,5 +192,5 @@ class userControllers {
       return res.status(500).json({ statut: false, message: e.message });
     }
   }
-}
+};
 export default userControllers;
