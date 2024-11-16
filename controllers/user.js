@@ -50,6 +50,7 @@ class userControllers {
           .status(404)
           .json({ statut: false, message: "Erreur lors création" });
       }
+      
       res.status(200).json({ statut: true, message: newUser });
     } catch (e) {
       res.status(500).json({ statut: false, message: e.message });
@@ -59,9 +60,8 @@ class userControllers {
   static async updateUser(req, res) {
     try {
       const { motDePasse, ...body } = req.body;
-
       const { id } = req.params;
-
+      
       const user = await User.findById(id);
       if (!user)
         return res
@@ -80,9 +80,11 @@ class userControllers {
           ...body,
         }
       );
-      res
-        .status(200)
-        .json({ statut: true, message: "Utilisateur modifié avec succès " });
+      res.status(200).json({
+        statut: true,
+        message: "Utilisateur modifié avec succès ",
+        utilisateur: { ...body, motDePasse: undefined },
+      });
     } catch (e) {
       res.status(500).json({ statut: false, message: e.message });
     }

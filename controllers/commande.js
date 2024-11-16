@@ -34,7 +34,6 @@ class CommandeControllers {
       const commandes = await Command.find({ userId: userId });
       res.status(200).json({ statut: true, commandes: commandes });
     } catch (e) {
-      console.log("error", e);
       res.status(500).json({ statut: false, message: e.message });
     }
   }
