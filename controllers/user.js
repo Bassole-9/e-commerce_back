@@ -189,7 +189,7 @@ class userControllers {
         }
       }
     } catch (e) {
-      return res.status(500).json({ statut: false, message: e.message });
+      return res.status(500).json({ statut: false, message: e.message })
     }
   }
 };
