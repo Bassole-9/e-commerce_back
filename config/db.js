@@ -1,10 +1,20 @@
 import { connect } from "mongoose";
 
-///function qui permet de connecter mon serveur a ma base de donnee
-export const connecterDb = async ()=>{
-    const secret = process.env.mongoo_uri
-    if(!secret)throw new Error("url n'existe pas")
-        await connect(secret,{
-    dbName : "fin"
-    })
-}
+export const connecterDb = async () => {
+  try {
+    const secret = process.env.MONGO_URI;
+
+    if (!secret) {
+      throw new Error("❌ URL MongoDB inexistante");
+    }
+
+    await connect(secret, {
+      dbName: "fin",
+    });
+
+    console.log("✅ MongoDB connecté");
+  } catch (error) {
+    console.error("❌ Erreur connexion DB :", error.message);
+    process.exit(1);
+  }
+};
