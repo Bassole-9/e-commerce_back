@@ -41,7 +41,7 @@ connecterDb()
   .then(() => {
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
-      console.log("function");
+      console.log("serveur en march sur le port 3000");
     });
   })
   .catch((error) => {
