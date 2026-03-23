@@ -22,18 +22,15 @@ app.use(express.static(path.join(__dirname, "dist")));
 app.use(morgan("dev"));
 app.use("/api/users", UserRouter);
 app.use("/api/commande", midllewearDecript, commandeRouter);
-app.use("/public", express.static(path.join(__dirname, "public")));
+// SPA (React)
+app.use(express.static(path.join(__dirname, "dist")));
+
+
 
 //supprime tous tes console Log et remplace la base url par l'url de render et tu fait mise en production avec le dist du front
-app.use("/", (req, res) => {
-  res
-    .setHeader("content-type", "text/html")
-    .sendFile(path.join(__dirname, "dist", "index.html"));
-});
-app.use("/*", (req, res) => {
-  res
-    .setHeader("content-type", "text/html")
-    .sendFile(path.join(__dirname, "dist", "index.html"));
+// SPA (React)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 ////
 
