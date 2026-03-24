@@ -32,7 +32,7 @@ class CommandeControllers {
       }
       //method de recuperation dans ma Bd
       const commandes = await Command.find({ userId: userId });
-      console.log(res.status(200).json({ statut: true, commandes: commandes }););
+      res.status(200).json({ statut: true, commandes: commandes })
       
       
     } catch (e) {
